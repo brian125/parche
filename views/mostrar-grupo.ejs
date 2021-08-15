@@ -1,0 +1,37 @@
+<div class="contenedor">
+    <h1><%= nombrePagina %></h1>
+    <div class="informacion-grupo">
+        <div class="imagen">
+            <% if(grupo.imagen) {%>
+                <img src="/uploads/grupos/<%= grupo.imagen %>">
+            <% } else { %>
+                <img src="/img/parche.jpg">
+            <% } %> 
+        </div>
+        <div class="texto">
+            <%- grupo.descripcion %> 
+            <% if(grupo.url) { %>
+                <a href="<%- grupo.url %>" class="url" target="_blank">Visita nuestro sitio web</a>
+            <% } %>
+
+            <% if(parches.length > 0) { %>
+                <h2>Próximos parches</h2>
+                <% parches.forEach(parche => { %>
+                    <ul class="lista-parches">
+                        <li>
+                            <div class="texto">
+                                <a href="/parche/<%= parche.slug %>">
+                                    <h3><%= parche.titulo %></h3>
+                                    <% moment.locale('es');%>
+                                    <% const fecha = parche.fecha + ' ' + parche.hora ;%>
+                                    <p class="fecha"><%= moment(fecha).format('LLLL')%> Horas</p>   
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                <% }) %> 
+                
+            <% } %> 
+        </div>
+    </div>
+</div>

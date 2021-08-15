@@ -1,0 +1,141 @@
+<div class="encabezado-evento">
+    <div class="contenedor">
+        <div class="resumen-evento">
+            <h1><%= parche.titulo %> </h1>
+            <div class="info-autor">
+                <div class="imagen">
+                    <% if(parche.usuario.imagen){ %>
+                        <img class="imagen" src="/uploads/perfiles/<%= parche.usuario.imagen %>"/> 
+                    <% } %>
+                </div>
+                <div class="informacion">
+                    <p>Organizado por:</p>
+                    <p class="autor">
+                        <a href="/usuarios/<%= parche.usuario.id %>"><%= parche.usuario.nombre %></a> Creador de:
+                        <a href="/grupos/<%= parche.grupo.id %> "><%= parche.grupo.nombre %> </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="pregunta-asistencia">
+            <% if(usuario.id) { %> 
+                <% const existe = parche.interesados.includes(usuario.id) %> 
+                    <form action="/confirmar-asistencia/<%= parche.slug %>" id="confirmar-asistencia">
+                        <p>¿Asistirás?</p>
+                        <% if (existe) { %>
+                            <input type="hidden" id="accion" value="cancelar">
+                            <input type="submit" class="btn btn-rojo btn-completo" value="Cancelar">
+                        <% } else { %>
+                            <input type="hidden" id="accion" value="confirmar">
+                            <input type="submit" class="btn btn-azul btn-completo" value="Si">
+                        <% } %>
+                        <div id="mensaje"></div>  
+                </form>
+            <% }else { %>
+                <p class="no-autenticado">Inicia sesión para confirmar tu asistencia</p>
+            <% } %> 
+        </div>
+    </div>
+</div>
+
+<main class="contenido-evento">
+    <div class="contenedor">
+        <div class="informacion-evento">
+            <div class="descripcion">
+                <% if(parche.grupo.imagen) { %> 
+                    <img src="/uploads/grupos/<%= parche.grupo.imagen %>">
+                <% } %> 
+                <%- parche.descripcion %>
+            </div>
+
+            <div class="asistentes">
+                <div class="titulo">
+                    <h3><%= parche.interesados.length %> Asistentes</h3>
+                    <a href="/asistentes/<%= parche.slug %>">Ver todos</a>
+                </div>
+            </div>
+
+            <div class="comentarios">
+                <h2>Comentarios</h2>
+                <% if(comentarios.length > 0) { %> 
+                    <% comentarios.forEach(comentario => { %> 
+                        <div class="comentario">
+                            <div class="imagen">
+                                <% if(comentario.usuario.imagen) { %> 
+                                    <img class="imagen-comentario" src="/uploads/perfiles/<%= comentario.usuario.imagen %>" alt="">
+                                <% } %> 
+                            </div>
+                            <div class="texto comentario-size">
+                                <p><%= comentario.mensaje %></p>
+                                <p>Escrito por: 
+                                    <a href="/usuarios/<%= comentario.usuario.id %>" class="resaltar">
+                                        <%= comentario.usuario.nombre %> 
+                                    </a>
+                                </p>
+                                <% if(comentario.usuarioId === usuario.id || parche.usuarioId === usuario.id) { %> 
+                                    <form action="/eliminar-comentario" method="POST" class="eliminar-comentario">
+                                        <input type="hidden" name="idComentario" value="<%= comentario.id %>">
+                                        <input type="submit" value="Eliminar" class="btn btn-rojo btn-comentario">
+                                    </form>
+                                <% } %> 
+                            </div>
+                        </div>
+                    <% }) %> 
+                <% } else { %>
+                    <p>No hay comentarios aún</p>
+                <% } %> 
+
+                <% if(usuario.id) { %> 
+                    <form action="/parche/<%= parche.id %>" method="POST" class="default-form comentarios">
+                        <legend>Agrega un comentario</legend>
+                        <div class="campo">
+                            <label>Comentario</label>
+                            <textarea name="comentario"></textarea>
+                        </div>
+                        <div class="campo enviar">
+                            <input type="submit" value="Enviar" class="btn btn-rosa">
+                        </div>
+                    </form>
+                <% } else {%>
+                    <p>Inicia sesión para agregar un comentario</p>
+                <% } %> 
+            </div>
+
+        </div>
+
+        <aside class="informacion">
+            <div class="fecha">
+                <% moment.locale('es'); %>
+                <% const fecha = `${parche.fecha} ${parche.hora}`; %> 
+                <p><%= moment(fecha).format('LLLL')%> horas </p>
+            </div>
+            <div class="ubicacion">
+                <p><%= parche.direccion %>, <%= parche.ciudad %>, <%= parche.estado %></p>
+            </div>
+
+            <input type="hidden" id="lat" value="<%= parche.ubicacion.coordinates[0]%>">
+            <input type="hidden" id="lng" value="<%= parche.ubicacion.coordinates[1]%>">
+            <input type="hidden" id="direccion" value="<%= parche.direccion %>">
+
+            <div id="ubicacion-parche"></div>
+
+        </aside>
+
+    </div>
+</main>
+
+<h2>Otros parches cercanos</h2>
+<div class="contenedor cercanos">
+    <% if (cercanos.length > 0) { %>
+        <% cercanos.forEach( cercano => { %>
+            <% if (cercano.titulo === parche.titulo) {%>
+                <% return %>
+            <% } else { %> 
+                <%- include('partials/card-parche.ejs' , {parche : cercano}) %>
+            <% } %>
+        <% }) %> 
+    <% } else { %>
+        <p>No hay parches cercanos</p>
+    <% } %> 
+</div>

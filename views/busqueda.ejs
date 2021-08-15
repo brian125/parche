@@ -1,0 +1,12 @@
+<div class="contenedor">
+    <h1><%= nombrePagina %></h1>
+    <% if(parches.length > 0) { %> 
+    <div class="grid columnas-md-3">
+        <% parches.forEach(parche => {%> 
+            <%- include('partials/card-parche.ejs', {parche : parche}); %>
+        <% }) %> 
+    </div>
+    <% } else { %>
+        <p>No hay resultados</p>
+    <% } %> 
+</div>

@@ -1,0 +1,30 @@
+<div class="card">
+    <% if(parche.grupo.imagen) {%> 
+        <img src="/uploads/grupos/<%= parche.grupo.imagen %> ">
+    <%} else { %>
+        <img src="/img/parche.jpg">
+    <% } %> 
+    <div class="card-texto">
+        <% moment.locale('es') %> 
+        <% const fecha = `${parche.fecha} ${parche.hora}` %> 
+        <p class="fecha"><%= moment(fecha).format('LLLL')%> horas </p>
+        <a href="/parche/<%= parche.slug %>">
+            <h3><%= parche.titulo %> </h3>
+        </a>
+        <div class="info-autor">
+            <% if(parche.usuario.imagen) { %> 
+                <div class="imagen">
+                    <img class="imagen" src="/uploads/perfiles/<%= parche.usuario.imagen %>"> 
+                </div>
+            <% } else { %>
+                <div class="imagen"></div>    
+            <% } %> 
+            
+            <div class="informacion">
+                <p>Organizado por:</p>
+                <p class="autor"><%= parche.usuario.nombre %></p>
+            </div>
+        </div>
+
+    </div>
+</div>

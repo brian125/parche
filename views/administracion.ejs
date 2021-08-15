@@ -1,0 +1,89 @@
+<main class="contenedor panel-administracion">
+    <h1><%= nombrePagina %> </h1>
+    <div class="contenedor-botones">
+        <a href="/nuevo-grupo" class="btn btn-amarillo">Nuevo grupo</a>
+        <a href="/nuevo-parche" class="btn btn-azul">Nuevo parche</a>
+        <a href="/editar-perfil" class="btn btn-rosa">Editar perfil</a>
+        <a href="/cambiar-password" class="btn btn-morado">Cambiar password</a>
+        <a href="/imagen-perfil" class="btn btn-amarillo">Imagen perfil</a>
+    </div>
+
+    <div class="seccion-admin">
+        <h2>Proximos parches</h2>
+        <% if(parches.length > 0) { %> 
+            <ul>
+                <% parches.forEach(parche => { %> 
+                    <li>
+                        <div class="informacion-admin">
+                            <% moment.locale('es') %> 
+                            <% const fecha = parche.fecha +' '+parche.hora %> 
+                            <p class="fecha"><%= moment(fecha).format('LLLL') %> horas </p>
+                            <a href="/parche/<%= parche.slug %>">
+                                <h3><%= parche.titulo %> </h3>
+                            </a>
+                            <small><%= parche.interesados.length %> Interesados</small>
+                        </div>
+                        <div class="acciones contenedor-botones">
+                            <a href="/editar-parche/<%= parche.id %> " class="btn btn-verde">Editar</a>
+                            <a href="/asistentes-parche/<%= parche.id %>" class="btn btn-azul2">Asistentes</a>
+                            <a href="/eliminar-parche/<%= parche.id %>" class="btn btn-rojo">Eliminar</a>
+                        </div>
+                    </li>
+                <% }) %> 
+            </ul>
+        <% } else {%>
+            <p>Aún no tienes parches creados</p>
+        <% } %> 
+    </div>
+
+    <div class="seccion-admin">
+        <h2>Tus grupos</h2>
+        <% if(grupos.length) { %> 
+            <ul>
+                <% grupos.forEach(grupo => { %> 
+                <li>
+                    <div class="informacion-admin">
+                        <h3><%= grupo.nombre %> </h3>
+                    </div>
+                    <div class="acciones contenedor-botones">
+                        <a href="/editar-grupo/<%= grupo.id %> " class="btn btn-verde">Editar</a>
+                        <a href="/imagen-grupo/<%= grupo.id %>" class="btn btn-azul2">Imagen</a>
+                        <a href="/eliminar-grupo/<%= grupo.id %>" class="btn btn-rojo">Eliminar</a>
+                    </div>
+                </li>
+                <% }) %> 
+            </ul>
+        <% }else { %>
+            <p>No tienes un grupo creado</p>
+        <% } %> 
+    </div>
+
+    <div class="seccion-admin">
+        <h2>Parches anteriores</h2>
+        <% if(anteriores.length > 0) { %> 
+            <ul>
+                <% anteriores.forEach(anterior => { %> 
+                    <li>
+                        <div class="informacion-admin">
+                            <% moment.locale('es') %> 
+                            <% const fecha = anterior.fecha +' '+anterior.hora %> 
+                            <p class="fecha"><%= moment(fecha).format('LLLL') %> horas </p>
+                            <a href="/parche/<%= anterior.slug %>">
+                                <h3><%= anterior.titulo %> </h3>
+                            </a>
+                            <small><%= anterior.interesados.length %> Interesados</small>
+                        </div>
+                        <div class="acciones contenedor-botones">
+                            <a href="/editar-parche/<%= anterior.id %> " class="btn btn-verde">Editar</a>
+                            <a href="/asistentes-parche/<%= anterior.id %>" class="btn btn-azul2">Asistentes</a>
+                            <a href="/eliminar-parche/<%= anterior.id %>" class="btn btn-rojo">Eliminar</a>
+                        </div>
+                    </li>
+                <% }) %> 
+            </ul>
+        <% } else {%>
+            <p>No hay parches anteriores</p>
+        <% } %> 
+    </div>
+
+</main>
